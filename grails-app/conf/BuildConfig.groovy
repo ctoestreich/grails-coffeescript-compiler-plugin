@@ -21,7 +21,7 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://repository.jboss.com/maven2/"
     }
     dependencies {
-		runtime( "ro.isdc.wro4j:wro4j-extensions:1.6.0" ) {
+		runtime( "ro.isdc.wro4j:wro4j-extensions:1.6.2" ) {
 			excludes(
 					"slf4j-log4j12",
 					"spring-web",
@@ -48,6 +48,10 @@ grails.project.dependency.resolution = {
         build(":tomcat:$grailsVersion",
               ":release:2.0.3",
               ":rest-client-builder:1.0.2") {
+            export = false
+        }
+
+        test(":spock:0.6") {
             export = false
         }
     }
