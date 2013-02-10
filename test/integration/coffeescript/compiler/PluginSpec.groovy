@@ -36,7 +36,7 @@ class PluginSpec extends IntegrationSpec {
 
         then: "if user created js file after coffee or modified manually, print error but don't change it"
         javascriptFile.exists()
-        javascriptFile.lastModified() > coffeeFile.lastModified()
+        javascriptFile.lastModified() >= coffeeFile.lastModified()
 
         and: 'file contains correct syntax'
         javascriptFile.text.contains("call")
@@ -66,7 +66,7 @@ class PluginSpec extends IntegrationSpec {
 
         then: "if user created js file after coffee or modified manually, print error but don't change it"
         javascriptFile.exists()
-        javascriptFile.lastModified() > coffeeFile.lastModified()
+        javascriptFile.lastModified() >= coffeeFile.lastModified()
 
         and: 'file contains correct syntax'
         !javascriptFile.text.contains("call")
@@ -95,7 +95,7 @@ class PluginSpec extends IntegrationSpec {
 
         then: "if user created js file after coffee or modified manually, print error but don't change it"
         javascriptFile.exists()
-        javascriptFile.lastModified() > coffeeFile.lastModified()
+        javascriptFile.lastModified() >= coffeeFile.lastModified()
 
         and: 'file contains correct syntax'
         !javascriptFile.text.contains("alert")
@@ -124,7 +124,7 @@ class PluginSpec extends IntegrationSpec {
 
         then: "if user created js file after coffee or modified manually, print error but don't change it"
         javascriptFile.exists()
-        javascriptFile.lastModified() > coffeeFile.lastModified()
+        javascriptFile.lastModified() >= coffeeFile.lastModified()
 
         and: 'file contains correct syntax'
         !javascriptFile.text.contains("alert")
@@ -153,7 +153,7 @@ class PluginSpec extends IntegrationSpec {
 
         then: "if user created js file after coffee or modified manually, print error but don't change it"
         javascriptFile.exists()
-        javascriptFile.lastModified() > coffeeFile.lastModified()
+        javascriptFile.lastModified() >= coffeeFile.lastModified()
 
         and: 'file contains correct syntax'
         javascriptFile.text.contains("alert")
