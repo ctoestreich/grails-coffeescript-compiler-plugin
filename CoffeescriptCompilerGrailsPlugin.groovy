@@ -10,7 +10,15 @@ class CoffeescriptCompilerGrailsPlugin {
     def dependsOn = [:]
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-            "grails-app/views/error.gsp"
+            'grails-app/conf/spring/resources.groovy',
+            'grails-app/conf/codenarc.groovy',
+            'grails-app/conf/codenarc.ruleset.all.groovy.txt',
+            'grails-app/domain/**',
+            'grails-app/i18n/**',
+            'grails-app/services/**',
+            'grails-app/views/**',
+            'web-app/**',
+            'codenarc.properties'
     ]
 
     def title = "Coffeescript Compiler Plugin" // Headline display name of the plugin
@@ -19,6 +27,10 @@ class CoffeescriptCompilerGrailsPlugin {
     def description = '''\
 A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into .js files, and does not require NodeJS or CoffeeScript to be installed on your machine. Leaves you with full control over if/how to use these generated .js files as resources, etc. Full documentation at: https://github.com/brian428/grails-coffeescript-compiler-plugin.
 '''
+
+    def developers = [
+            [name: "Christian Oestreich", email: "acetrike@gmail.com"]
+    ]
 
     // URL to the plugin's documentation
     def documentation = "https://github.com/brian428/grails-coffeescript-compiler-plugin"
