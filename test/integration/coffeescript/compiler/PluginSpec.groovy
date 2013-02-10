@@ -182,7 +182,7 @@ class PluginSpec extends IntegrationSpec {
 
         then: "if user created js file after coffee or modified manually then it should be changed by default"
         javascriptFile.exists()
-        javascriptFile.lastModified() > coffeeFile.lastModified()
+        javascriptFile.lastModified() >= coffeeFile.lastModified()
         !javascriptFile.text.contains("alert")
 
         and: 'file contains correct syntax'
