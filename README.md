@@ -70,7 +70,7 @@ To cause the compiler to use a "--no-wrap" simply add the following to your conf
 }
 ```
 
-By default the plugin will purge the js folder.  If you wish for your JavaScript and CoffeeScript to live happily together in your application or in the same folder simply add the `purgeJS=false` to the config.
+**CAUTION** By default the plugin will purge the js folder on startup.  If you wish for your JavaScript and CoffeeScript to live happily together in your application or in the same folder simply add the `purgeJS=false` to the config.
 
 ```groovy
 "coffeescript-compiler" {
