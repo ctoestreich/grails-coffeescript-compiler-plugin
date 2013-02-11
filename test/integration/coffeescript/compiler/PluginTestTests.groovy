@@ -75,8 +75,10 @@ class PluginTestTests {
         createValidCoffeeFile("src/coffee/app/hidden/child", "testCoffeeSourceTreeHidden2")
 
         // Mark app/hidden folder as hidden on Windows
-        Process p = Runtime.runtime.exec("attrib +H " + new File("src/coffee/app/hidden").getPath())
-        p.waitFor();
+        if(System.getProperty("os.name").contains("Windows")) {
+            Process p = Runtime.runtime.exec("attrib +H " + new File("src/coffee/app/hidden").getPath())
+            p.waitFor();
+        }
 
         def config = createPluginConfig([:], "myApp", "src/coffee/app", "web-app/js/app")
         compilerManager.compileFromConfig(config)
