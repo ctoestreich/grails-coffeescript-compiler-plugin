@@ -2,7 +2,6 @@ package coffeescript.compiler
 
 import grails.plugin.spock.IntegrationSpec
 import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
-import org.junit.Test
 import ro.isdc.wro.WroRuntimeException
 
 /**

@@ -71,7 +71,10 @@ implements ResourcePreProcessor, ResourcePostProcessor {
     protected CoffeeScript newCoffeeScript(Boolean wrapJS = true) {
         CoffeeScript cs = new CoffeeScript()
         if(!wrapJS){
-            cs.setOptions("noWrap")
+//            cs.setOptions("noWrap")
+//            cs.setOptions("no-wrap")
+            cs.setOptions("bare")
+            //why does bare work?  Thought they moved it to noWrap (--no-wrap)?!
         }
         cs
     }
