@@ -68,7 +68,7 @@ class CoffeeCompiler {
                 minify(outputFile)
             }
 
-            log.debug "Compiling ${minifyJS ? " and minifying " : ""} ${file.path} to ${outputFile.path}"
+            log.debug "Compiling ${minifyJS ? ' and minifying ' : ''} ${file.path} to ${outputFile.path}"
 
 
         } catch(WroRuntimeException wroRuntimeException) {
@@ -133,7 +133,7 @@ class CoffeeCompiler {
         pool.awaitTermination(MINUTES_TO_WAIT_FOR_COMPLETE, TimeUnit.MINUTES)
     }
 
-    def eachFileRecurse(File dir, Closure closure, Closure filter = { return true }) {
+    def eachFileRecurse(File dir, Closure closure, Closure filter = { true }) {
         dir.listFiles().each { file ->
             if(filter.call(file)) {
                 if(file.isDirectory()) {
@@ -147,8 +147,8 @@ class CoffeeCompiler {
 
     def minify(File inputFile) {
         File targetFile = new File(inputFile.path)
-        inputFile.renameTo(new File(inputFile.path.replace(".js", ".tmp")))
-        inputFile = new File(inputFile.path.replace(".js", ".tmp"))
+        inputFile.renameTo(new File(inputFile.path.replace('.js', '.tmp')))
+        inputFile = new File(inputFile.path.replace('.js', '.tmp'))
 
         try {
             Resource resource = Resource.create(inputFile.path, ResourceType.JS)
@@ -157,7 +157,7 @@ class CoffeeCompiler {
             new UglifyJsProcessor().process(resource, reader, writer)
             inputFile.delete()
         } catch(Exception e) {
-            inputFile.renameTo(new File(inputFile.path.replace(".tmp", ".js")))
+            inputFile.renameTo(new File(inputFile.path.replace('.tmp', '.js')))
             log.error e.message, e
             throw e
         }
