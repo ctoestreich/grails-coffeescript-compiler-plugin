@@ -2,9 +2,6 @@ package org.grails.plugins.coffee.compiler.processor
 
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.StringUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import ro.isdc.wro.WroRuntimeException
 import ro.isdc.wro.extensions.processor.support.ObjectPoolHelper
 import ro.isdc.wro.extensions.processor.support.coffeescript.CoffeeScript
@@ -17,13 +14,9 @@ import ro.isdc.wro.util.ObjectFactory
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 
-
-
 @SupportedResourceType(ResourceType.JS)
-class RhinoCoffeeScriptProcessor
-implements ResourcePreProcessor, ResourcePostProcessor {
+class RhinoCoffeeScriptProcessor implements ResourcePreProcessor, ResourcePostProcessor {
     private static final Log log = LogFactory.getLog(RhinoCoffeeScriptProcessor)
-    static final String ALIAS = "rhinoCoffeeScript"
     ObjectPoolHelper<CoffeeScript> enginePool
 
     public RhinoCoffeeScriptProcessor(Boolean wrapJS = true) {
@@ -78,7 +71,6 @@ implements ResourcePreProcessor, ResourcePostProcessor {
         }
         cs
     }
-
 
     /**
      * {@inheritDoc}

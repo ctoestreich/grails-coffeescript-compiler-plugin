@@ -11,40 +11,31 @@ class CoffeeCompilerManager {
     Boolean purgeJS = true
     Boolean wrapJS = true
     Boolean overrideJS = true
-    String defaultCoffeeSourcePath = "src/coffee"
-    String defaultJsOutputPath = "web-app/js/app"
+    String defaultCoffeeSourcePath = 'src/coffee'
+    String defaultJsOutputPath = 'web-app/js/app'
 
     def compileFromConfig(config) {
         def compilePaths
-        if(config.containsKey("coffeescript-compiler"))
-            compilePaths = config["coffeescript-compiler"]
-        else {
+        if(config.containsKey('coffeescript-compiler')) {
+            compilePaths = config['coffeescript-compiler']
+        } else {
             def defaultPaths = [coffeeSourcePath: defaultCoffeeSourcePath, jsOutputPath: defaultJsOutputPath]
             compilePaths = [default: defaultPaths]
         }
 
         compilePaths.each {
-            String configCoffeeSourcePath = defaultCoffeeSourcePath
-            String configJsOutputPath = defaultJsOutputPath
+            String configCoffeeSourcePath = it.value.containsKey('coffeeSourcePath') ? it.value.coffeeSourcePath : defaultCoffeeSourcePath
+            String configJsOutputPath = it.value.containsKey('jsOutputPath') ? it.value.jsOutputPath : defaultJsOutputPath
 
-            if(it.value.containsKey("coffeeSourcePath"))
-                configCoffeeSourcePath = it.value.coffeeSourcePath
-            if(it.value.containsKey("jsOutputPath"))
-                configJsOutputPath = it.value.jsOutputPath
-
-            if(new File(configCoffeeSourcePath).exists())
+            if(new File(configCoffeeSourcePath).exists()) {
                 new CoffeeCompiler(configCoffeeSourcePath, configJsOutputPath).compileAll(minifyJS, purgeJS, wrapJS, overrideJS)
+            }
         }
     }
 
     def compileFileFromConfig(File file, config) {
-        def compilePaths
-        if(config.containsKey("coffeescript-compiler"))
-            compilePaths = config["coffeescript-compiler"]
-        else {
-            def defaultPaths = [coffeeSourcePath: defaultCoffeeSourcePath, jsOutputPath: defaultJsOutputPath]
-            compilePaths = [default: defaultPaths]
-        }
+        def compilePaths = config.containsKey('coffeescript-compiler') ?
+                           config['coffeescript-compiler'] : [default: [coffeeSourcePath: defaultCoffeeSourcePath, jsOutputPath: defaultJsOutputPath]]
 
         def normalizedChangedFilePath = file.path.replace('\\', '/')
         def matched = false
@@ -52,20 +43,19 @@ class CoffeeCompilerManager {
         String configJsOutputPath = defaultJsOutputPath
 
         compilePaths.each {
-            if(!matched && it.value.containsKey("coffeeSourcePath") && normalizedChangedFilePath.contains(it.value.coffeeSourcePath)) {
+            if(!matched && it.value.containsKey('coffeeSourcePath') && normalizedChangedFilePath.contains(it.value.coffeeSourcePath)) {
                 configCoffeeSourcePath = it.value.coffeeSourcePath
-                if(it.value.containsKey("jsOutputPath"))
+                if(it.value.containsKey('jsOutputPath')) {
                     configJsOutputPath = it.value.jsOutputPath
+                }
                 matched = true
             }
         }
 
-        if(matched && new File(configCoffeeSourcePath).exists())
+        if(matched && new File(configCoffeeSourcePath).exists()) {
             new CoffeeCompiler(configCoffeeSourcePath, configJsOutputPath).compileFile(file, minifyJS, wrapJS, overrideJS)
-        else {
-            String message = "Could not find a matching coffeeSourcePath for ${file.path}."
-            println message
-            log.error message
+        } else {
+            log.error "Could not find a matching coffeeSourcePath for ${file.path}."
         }
     }
 }

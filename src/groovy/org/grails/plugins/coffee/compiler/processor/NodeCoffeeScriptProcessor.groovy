@@ -34,15 +34,13 @@ import org.apache.commons.logging.LogFactory
  * @created 10 Sep 2012
  */
 @SupportedResourceType(ResourceType.JS)
-class NodeCoffeeScriptProcessor
-implements ResourcePreProcessor, ResourcePostProcessor, SupportAware {
+class NodeCoffeeScriptProcessor implements ResourcePreProcessor, ResourcePostProcessor, SupportAware {
     private static final Log log = LogFactory.getLog(NodeCoffeeScriptProcessor)
     /**
      * Options passed to coffee command. -c is for compile, -p is for print to stdout.
      */
     private static final String OPTION_COMPILE = "-cp"
     private static final String SHELL_COMMAND = "coffee"
-    static final String ALIAS = "nodeCoffeeScript"
     Boolean wrapJS = true
 
     /**
@@ -162,14 +160,14 @@ implements ResourcePreProcessor, ResourcePostProcessor, SupportAware {
             temp = WroUtil.createTempFile()
             final Process process = createProcess(temp)
             final int exitValue = process.waitFor()
-            log.debug "exitValue ${exitValue}. ErrorMessage: ${IOUtils.toString(process.getInputStream())}"
+            log.debug "exitValue ${exitValue}. ErrorMessage: ${IOUtils.toString(process.getInputStream()) as String}"
             if (exitValue != 0) {
                 throw new UnsupportedOperationException("Lessc is not a supported operation on this platform")
             }
-            log.debug "The ${this.class.name} processor is supported."
+            log.debug "The NodeCoffeeSript processor is supported."
             return true
         } catch (final Exception e) {
-            log.debug("The ${getClass().getName()} processor is not supported. Because: ${e.getMessage()}" )
+            log.debug("The NodeCoffeeSript processor is not supported. Because: ${e.message as String}" )
             return false
         } finally {
             FileUtils.deleteQuietly(temp)

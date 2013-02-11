@@ -1,8 +1,7 @@
 package org.grails.plugins.coffee.compiler.processor
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import ro.isdc.wro.model.group.Inject
 import ro.isdc.wro.model.group.processor.Injector
 import ro.isdc.wro.model.resource.Resource
@@ -13,8 +12,6 @@ import ro.isdc.wro.model.resource.processor.ResourcePreProcessor
 import ro.isdc.wro.model.resource.processor.decorator.LazyProcessorDecorator
 import ro.isdc.wro.model.resource.processor.decorator.ProcessorDecorator
 import ro.isdc.wro.util.LazyInitializer
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
 
 /**
  * Similar to {@link ro.isdc.wro.extensions.processor.js.RhinoCoffeeScriptProcessor} but will prefer using {@link ro.isdc.wro.extensions.processor.js.NodeCoffeeScriptProcessor} if it is supported and
@@ -27,8 +24,8 @@ import org.apache.commons.logging.LogFactory
 @SupportedResourceType(ResourceType.JS)
 class CoffeeScriptProcessor
 implements ResourcePreProcessor, ResourcePostProcessor {
+
     private static final Log log = LogFactory.getLog(CoffeeScriptProcessor)
-    static final String ALIAS = "coffeeScript"
     @Inject
     private Injector injector
     private ResourcePreProcessor resourcePreProcessor
@@ -38,9 +35,9 @@ implements ResourcePreProcessor, ResourcePostProcessor {
         this.wrapJS = wrapJS
     }
 /**
-     * Responsible for coffeeScriptProcessor initialization. First the nodeCoffeeScript processor will be used as a primary processor. If
-     * it is not supported, the fallback processor will be used.
-     */
+ * Responsible for coffeeScriptProcessor initialization. First the nodeCoffeeScript processor will be used as a primary processor. If
+ * it is not supported, the fallback processor will be used.
+ */
     private ResourcePreProcessor initializeProcessor() {
         final ProcessorDecorator processor = new ProcessorDecorator(createNodeProcessor())
         processor.isSupported() ? processor : createRhinoProcessor()
@@ -65,7 +62,7 @@ implements ResourcePreProcessor, ResourcePostProcessor {
     }
 
     public ResourcePreProcessor getProcessor() {
-        if (resourcePreProcessor == null) {
+        if(resourcePreProcessor == null) {
             resourcePreProcessor = initializeProcessor()
             injector.inject(resourcePreProcessor)
         }
@@ -90,6 +87,7 @@ implements ResourcePreProcessor, ResourcePostProcessor {
     public ResourcePreProcessor createRhinoProcessor() {
         log.debug("Node CoffeeScript is not supported. Using fallback Rhino processor")
         return new LazyProcessorDecorator(new LazyInitializer<ResourcePreProcessor>() {
+
             @Override
             protected ResourcePreProcessor initialize() {
                 new RhinoCoffeeScriptProcessor(wrapJS)
