@@ -80,7 +80,7 @@ To cause the compiler to use a "--no-wrap" simply add the following to your conf
 }
 ```
 
-By default the plugin will process any `*.coffee` files whose companion `*.js` file has a newer timestamp.  If you wish to disable this feature to skip recompile (in the case of quickly dubugging JavaScript files on without touching coffee (probably not recommended generally) add the following flag.
+By default the plugin on startup will process any `*.coffee` files whose companion `*.js` file has a newer timestamp.  If you wish to disable this feature to skip recompile on startup.
 
 ```groovy
 "coffeescript-compiler" {
