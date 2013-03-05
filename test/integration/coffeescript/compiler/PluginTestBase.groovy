@@ -1,13 +1,13 @@
 package coffeescript.compiler;
 
 
+import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
 import org.junit.After
 import org.junit.Test
 import ro.isdc.wro.WroRuntimeException
 
 import static org.junit.Assert.assertFalse
 import static org.junit.Assert.assertTrue
-import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
 
 /**
  */
@@ -23,14 +23,14 @@ abstract class PluginTestBase {
 
     @Test
     void testDefaultConfig() {
-        if(shouldIgnore()){
-            println 'ignoring test!'
-            return
-        }
-
         createValidCoffeeFile("src/coffee", "testDefaultConfig")
         compilerManager.compileFromConfig([:])
         sleep(1000) // Poor-man's thread wait solution
+
+        if(shouldIgnore()) {
+            println 'ignoring test!'
+            return
+        }
 
         def jsFile = new File("web-app/js/app/testDefaultConfig.js")
         assertTrue("Generated file ${jsFile.path} does not exist", jsFile.exists())
@@ -39,15 +39,15 @@ abstract class PluginTestBase {
 
     @Test
     void testWithConfig() {
-        if(shouldIgnore()){
-            println 'ignoring test!'
-            return
-        }
-
         createValidCoffeeFile("src/coffee/app", "testWithConfig")
         def config = createPluginConfig([:], "myApp", "src/coffee/app", "web-app/js/app")
         compilerManager.compileFromConfig(config)
         sleep(1000) // Poor-man's thread wait solution
+
+        if(shouldIgnore()) {
+            println 'ignoring test!'
+            return
+        }
 
         def jsFile = new File("web-app/js/app/testWithConfig.js")
         assertTrue("Generated file ${jsFile.path} does not exist", jsFile.exists())
@@ -56,11 +56,6 @@ abstract class PluginTestBase {
 
     @Test
     void testCoffeeSourceTree() {
-        if(shouldIgnore()){
-            println 'ignoring test!'
-            return
-        }
-
         createValidCoffeeFile("src/coffee/app", "testCoffeeSourceTree1")
         createValidCoffeeFile("src/coffee/app/child", "testCoffeeSourceTree2")
         createValidCoffeeFile("src/coffee/app/child/subchild", "testCoffeeSourceTree3")
@@ -68,6 +63,11 @@ abstract class PluginTestBase {
         def config = createPluginConfig([:], "myApp", "src/coffee/app", "web-app/js/app")
         compilerManager.compileFromConfig(config)
         sleep(1500) // Poor-man's thread wait solution
+
+        if(shouldIgnore()) {
+            println 'ignoring test!'
+            return
+        }
 
         def jsFile
         jsFile = new File("web-app/js/app/testCoffeeSourceTree1.js")
@@ -85,11 +85,6 @@ abstract class PluginTestBase {
 
     @Test
     void testCoffeeSourceTreeIgnoresHiddenPaths() {
-        if(shouldIgnore()){
-            println 'ignoring test!'
-            return
-        }
-
         createValidCoffeeFile("src/coffee/app", "testCoffeeSourceTree1")
         createValidCoffeeFile("src/coffee/app/child", "testCoffeeSourceTree2")
         createValidCoffeeFile("src/coffee/app/child/subchild", "testCoffeeSourceTree3")
@@ -105,6 +100,11 @@ abstract class PluginTestBase {
         def config = createPluginConfig([:], "myApp", "src/coffee/app", "web-app/js/app")
         compilerManager.compileFromConfig(config)
         sleep(1500) // Poor-man's thread wait solution
+
+        if(shouldIgnore()) {
+            println 'ignoring test!'
+            return
+        }
 
         def jsFile
         jsFile = new File("web-app/js/app/testCoffeeSourceTree1.js")
@@ -132,11 +132,6 @@ abstract class PluginTestBase {
 
     @Test
     void testMultipleCoffeeSourceTrees() {
-        if(shouldIgnore()){
-            println 'ignoring test!'
-            return
-        }
-
         createValidCoffeeFile("src/coffee/app", "testMultipleCoffeeSourceTrees1")
         createValidCoffeeFile("src/coffee/app/child", "testMultipleCoffeeSourceTrees2")
         createValidCoffeeFile("src/coffee/app/child/subchild", "testMultipleCoffeeSourceTrees3")
@@ -148,6 +143,11 @@ abstract class PluginTestBase {
         config = createPluginConfig(config, "myTests", "src/coffee/spec", "web-app/js/spec")
         compilerManager.compileFromConfig(config)
         sleep(2000) // Poor-man's thread wait solution
+
+        if(shouldIgnore()) {
+            println 'ignoring test!'
+            return
+        }
 
         def jsFile
         jsFile = new File("web-app/js/app/testMultipleCoffeeSourceTrees1.js")
@@ -177,13 +177,14 @@ abstract class PluginTestBase {
 
     @Test
     void testCompileFile() {
-        if(shouldIgnore()){
+        createValidCoffeeFile("src/coffee", "testCompileFile")
+        compilerManager.compileFileFromConfig(new File("src/coffee/testCompileFile.coffee"), [:])
+        sleep(1000)
+        if(shouldIgnore()) {
             println 'ignoring test!'
             return
         }
 
-        createValidCoffeeFile("src/coffee", "testCompileFile")
-        compilerManager.compileFileFromConfig(new File("src/coffee/testCompileFile.coffee"), [:])
         def jsFile = new File("web-app/js/app/testCompileFile.js")
         assertTrue("Generated file ${jsFile.path} does not exist", jsFile.exists())
         assert jsFile.text.contains('someFunctionCall')

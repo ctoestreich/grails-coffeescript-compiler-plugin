@@ -3,7 +3,6 @@ package org.grails.plugins.coffee.compiler
 import org.apache.commons.io.FileUtils
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.grails.plugins.coffee.compiler.processor.CoffeeScriptProcessor
 import ro.isdc.wro.WroRuntimeException
 import ro.isdc.wro.config.Context
 import ro.isdc.wro.config.jmx.WroConfiguration
@@ -16,6 +15,7 @@ import ro.isdc.wro.model.resource.ResourceType
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import org.grails.plugins.coffee.compiler.processor.CoffeeScriptProcessor
 
 class CoffeeCompiler
 {
