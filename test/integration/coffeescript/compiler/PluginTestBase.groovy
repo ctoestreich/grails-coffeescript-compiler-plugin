@@ -177,12 +177,19 @@ abstract class PluginTestBase {
 
     @Test
     void testCompileFile() {
-        createValidCoffeeFile("src/coffee", "testCompileFile")
-        compilerManager.compileFileFromConfig(new File("src/coffee/testCompileFile.coffee"), [:])
-        sleep(1000)
-        if(shouldIgnore()) {
-            println 'ignoring test!'
-            return
+        try {
+            createValidCoffeeFile("src/coffee", "testCompileFile")
+            compilerManager.compileFileFromConfig(new File("src/coffee/testCompileFile.coffee"), [:])
+        } catch(WroRuntimeException e){
+            //a bit janky, but so is having to test for both node and rhino when they are mutually exclusive.
+            //this is due to not having the compile deferred when calling compileFileFromConfig and an exception is thrown.
+            if(shouldIgnore()) {
+                println 'ignoring test!'
+                assert true
+                return
+            } else {
+                assert false
+            }
         }
 
         def jsFile = new File("web-app/js/app/testCompileFile.js")
