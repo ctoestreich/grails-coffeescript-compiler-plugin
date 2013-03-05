@@ -21,10 +21,10 @@ class CoffeescriptCompilerGrailsPlugin {
             'codenarc.properties'
     ]
 
-	def title = "Coffeescript Compiler Plugin" // Headline display name of the plugin
-	def author = "Brian Kotek"
-	def authorEmail = ""
-	def description = '''\
+    def title = "Coffeescript Compiler Plugin" // Headline display name of the plugin
+    def author = "Brian Kotek"
+    def authorEmail = ""
+    def description = '''\
 A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into .js files, and does not require NodeJS or CoffeeScript to be installed on your machine. Leaves you with full control over if/how to use these generated .js files as resources, etc. Full documentation at: https://github.com/brian428/grails-coffeescript-compiler-plugin.
 '''
 
@@ -41,7 +41,7 @@ A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into
 	// Details of company behind the plugin (if there is one)
 	def organization = [ name: "Brian Kotek", url: "http://www.briankotek.com/" ]
 
-	// Any additional developers beyond the author specified above.
+    // Any additional developers beyond the author specified above.
 //    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
 
 	// Location of the plugin's issue tracker.
@@ -54,12 +54,12 @@ A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into
 	def environments = [ excludes: "test" ]
 	def scopes = [ excludes: [ "functional_test", "test" ] ]
 
-	// Watch for changes to any .coffee files under /src or /web-app to recompile at runtime.
-	def watchedResources = [ "file:./src/*.coffee", "file:./src/**/*.coffee", "file:./web-app/*.coffee", "file:./web-app/**/*.coffee" ]
+    // Watch for changes to any .coffee files under /src or /web-app to recompile at runtime.
+    def watchedResources = ["file:./src/*.coffee", "file:./src/**/*.coffee", "file:./web-app/*.coffee", "file:./web-app/**/*.coffee"]
 
-	// Set up compiler manager. Default paths defined in CoffeeCompilerManager can be overridden with constructor args.
-	def coffeeCompilerManager = new CoffeeCompilerManager()
-	def startUpComplete = false
+    // Set up compiler manager. Default paths defined in CoffeeCompilerManager can be overridden with constructor args.
+    def coffeeCompilerManager = new CoffeeCompilerManager()
+    def startUpComplete = false
 
     def doWithWebDescriptor = { xml ->
         //todo: why is this check here?  In case xml changes?
