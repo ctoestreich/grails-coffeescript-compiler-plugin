@@ -18,7 +18,8 @@ class CoffeescriptCompilerGrailsPlugin {
             'grails-app/services/**',
             'grails-app/views/**',
             'web-app/**',
-            'codenarc.properties'
+            'codenarc.properties',
+            '.travis.yml'
     ]
 
     def title = "Coffeescript Compiler Plugin" // Headline display name of the plugin
