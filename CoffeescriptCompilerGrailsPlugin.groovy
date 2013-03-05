@@ -1,26 +1,25 @@
 import grails.util.Environment
 import org.grails.plugins.coffee.compiler.CoffeeCompilerManager
 
-class CoffeescriptCompilerGrailsPlugin
-{
-	// the plugin version
-	def version = "0.8.1"
-	// the version or versions of Grails the plugin is designed for
-	def grailsVersion = "2.1 > *"
-	// the other plugins this plugin depends on
-	def dependsOn = [ : ]
-	// resources that are excluded from plugin packaging
-	def pluginExcludes = [
-			'grails-app/conf/spring/resources.groovy',
-			'grails-app/conf/codenarc.groovy',
-			'grails-app/conf/codenarc.ruleset.all.groovy.txt',
-			'grails-app/domain/**',
-			'grails-app/i18n/**',
-			'grails-app/services/**',
-			'grails-app/views/**',
-			'web-app/**',
-			'codenarc.properties'
-	]
+class CoffeescriptCompilerGrailsPlugin {
+    // the plugin version
+    def version = "0.9"
+    // the version or versions of Grails the plugin is designed for
+    def grailsVersion = "2.1 > *"
+    // the other plugins this plugin depends on
+    def dependsOn = [:]
+    // resources that are excluded from plugin packaging
+    def pluginExcludes = [
+            'grails-app/conf/spring/resources.groovy',
+            'grails-app/conf/codenarc.groovy',
+            'grails-app/conf/codenarc.ruleset.all.groovy.txt',
+            'grails-app/domain/**',
+            'grails-app/i18n/**',
+            'grails-app/services/**',
+            'grails-app/views/**',
+            'web-app/**',
+            'codenarc.properties'
+    ]
 
 	def title = "Coffeescript Compiler Plugin" // Headline display name of the plugin
 	def author = "Brian Kotek"
@@ -62,33 +61,44 @@ A simple CoffeeScript 1.4 compiler plugin. It compiles .coffee source files into
 	def coffeeCompilerManager = new CoffeeCompilerManager()
 	def startUpComplete = false
 
-	def doWithWebDescriptor = { xml ->
-		if( !startUpComplete ) {
-			def thisPluginConfig = [ : ]
+    def doWithWebDescriptor = { xml ->
+        //todo: why is this check here?  In case xml changes?
+        if(!startUpComplete) {
+            def thisPluginConfig = [:]
 
-			if( application?.config?."coffeescript-compiler"?.containsKey( "pluginConfig" ) ) {
-				thisPluginConfig = application.config."coffeescript-compiler".pluginConfig
-				application.config."coffeescript-compiler".remove( "pluginConfig" )
-			}
+            if(application?.config?."coffeescript-compiler"?.containsKey("pluginConfig")) {
+                thisPluginConfig = application.config."coffeescript-compiler".pluginConfig
+                //todo: why is this removed?
+                application.config."coffeescript-compiler".remove("pluginConfig")
+            }
 
-			coffeeCompilerManager.minifyJS = ( thisPluginConfig.containsKey( "minifyInEnvironment" ) ) ?
-				thisPluginConfig.minifyInEnvironment.contains( Environment.current.toString() ) :
-				Environment.current == Environment.PRODUCTION
+            coffeeCompilerManager.minifyJS = getMinifyJSFlag(thisPluginConfig)
+            //default the purge to true
+            coffeeCompilerManager.purgeJS = (thisPluginConfig.containsKey("purgeJS")) ? thisPluginConfig.purgeJS as Boolean : false
+            coffeeCompilerManager.wrapJS = (thisPluginConfig.containsKey("wrapJS")) ? thisPluginConfig.wrapJS as Boolean : true
+            coffeeCompilerManager.overrideJS = (thisPluginConfig.containsKey("overrideJS")) ? thisPluginConfig.overrideJS as Boolean : true
+            coffeeCompilerManager.compileFromConfig(application.config)
+            startUpComplete = true
+        }
+    }
 
-			//default the purge to true
-			coffeeCompilerManager.purgeJS = ( thisPluginConfig.containsKey( "purgeJS" ) ) ? thisPluginConfig.purgeJS as Boolean : true
-			coffeeCompilerManager.wrapJS = ( thisPluginConfig.containsKey( "wrapJS" ) ) ? thisPluginConfig.wrapJS as Boolean : true
-			coffeeCompilerManager.overrideJS = ( thisPluginConfig.containsKey( "overrideJS" ) ) ? thisPluginConfig.overrideJS as Boolean : true
-			coffeeCompilerManager.compileFromConfig( application.config )
-			startUpComplete = true
-		}
-	}
+    /**
+     * Will only minifyJS in configured environments or production of config is left out.
+     * @param config The application config
+     * @return Boolean if current environment matches one in the config
+     */
+    Boolean getMinifyJSFlag(config) {
+        config?.containsKey("minifyInEnvironment") ?
+        config.minifyInEnvironment.intersect([Environment.current, Environment.current.toString()]).size() > 0 :
+        Environment.current == Environment.PRODUCTION
+    }
 
-	def onChange = { event ->
-		def changedFile = event.source.file
+    def onChange = { event ->
+        def changedFile = event.source.file
 
-		if( changedFile.path.contains( ".coffee" ) ) {
-			coffeeCompilerManager.compileFileFromConfig( changedFile, application.config )
-		}
-	}
+        if(changedFile.path.contains(".coffee")) {
+            log.debug "Recompiling file: ${changedFile.path}"
+            coffeeCompilerManager.compileFileFromConfig(changedFile, application.config)
+        }
+    }
 }

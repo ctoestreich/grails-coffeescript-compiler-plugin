@@ -21,7 +21,7 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://repository.jboss.com/maven2/"
     }
     dependencies {
-        runtime("ro.isdc.wro4j:wro4j-extensions:1.6.2") {
+        compile("ro.isdc.wro4j:wro4j-extensions:1.6.2") {
             excludes(
                     "slf4j-log4j12",
                     "spring-web",

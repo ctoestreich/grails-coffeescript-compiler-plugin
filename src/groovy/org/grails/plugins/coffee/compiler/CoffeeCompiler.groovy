@@ -108,11 +108,14 @@ class CoffeeCompiler
 		isJavascriptNewer
 	}
 
-	def compileAll( Boolean minifyJS = false, Boolean purgeJS = true, Boolean wrapJS = true, Boolean overrideJS = true )
+	def compileAll( Boolean minifyJS = false, Boolean purgeJS = false, Boolean wrapJS = true, Boolean overrideJS = true )
 	{
 		if( purgeJS ) {
 			log.info "Purging ${ jsOutputPath }..."
-			new File( jsOutputPath ).deleteDir()
+			new File( jsOutputPath ).eachFileMatch(~/.*\.js/) { f ->
+                log.info "Deleting ${ f.absolutePath }"
+                f.delete()
+            }
 		}
 		new File( jsOutputPath ).mkdirs()
 		def coffeeSource = new File( coffeeSourcePath )

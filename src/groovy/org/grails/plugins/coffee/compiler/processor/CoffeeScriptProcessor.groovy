@@ -25,12 +25,14 @@ import ro.isdc.wro.util.LazyInitializer
 class CoffeeScriptProcessor
 implements ResourcePreProcessor, ResourcePostProcessor {
 
-	public static Boolean forceRhino = false
+    public static Boolean forceRhino = false
+    public static Boolean forceNode = false
     private static final Log log = LogFactory.getLog(CoffeeScriptProcessor)
     @Inject
     private Injector injector
     private ResourcePreProcessor resourcePreProcessor
     private Boolean wrapJS = true
+    public static Boolean isNodeProcessor = false
 
 
     CoffeeScriptProcessor(Boolean wrapJS) {
@@ -41,17 +43,20 @@ implements ResourcePreProcessor, ResourcePostProcessor {
  * it is not supported, the fallback processor will be used.
  */
     private ResourcePreProcessor initializeProcessor() {
-		def processor
+        def processor
 
-		if( !forceRhino ) {
-			processor = new ProcessorDecorator(createNodeProcessor())
-			processor.isSupported() ? processor : createRhinoProcessor()
-		}
-		else {
-			processor = createRhinoProcessor()
-		}
-
-		return processor
+        if(forceRhino) {
+            processor = createRhinoProcessor()
+        } else if(forceNode) {
+            processor = createNodeProcessor()
+        } else {
+            processor = new ProcessorDecorator(createNodeProcessor())
+            isNodeProcessor = processor.isSupported()
+            if(!processor.isSupported()) {
+                processor = createRhinoProcessor()
+            }
+        }
+        processor
     }
 
     /**
